@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Think Cell Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --teal:#2A9D8F;--teal-dark:#1A7A6F;--sage:#A7C4A0;--lavender:#C8B6E2;
+  --cream:#FDF8F0;--earth:#D4A574;--deep:#1B2A3B;--rose:#E8A0BF;
+  --text:#3D4F5F;--muted:#7A8D9C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cream);overflow-x:hidden;}
+::selection{background:var(--teal);color:#fff;}
+
+/* Animations */
+@keyframes heroShimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+.fade-in{opacity:0;transform:translateY(36px);transition:all .7s cubic-bezier(.23,1,.32,1);}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+
+/* Navbar */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 40px;transition:all .4s;}
+.navbar.scrolled{background:rgba(253,248,240,.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(42,157,143,.08);}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.nav-logo{cursor:pointer;display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-circle{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--sage));display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:13px;}
+.nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#fff;transition:color .4s;letter-spacing:.5px;}
+.navbar.scrolled .nav-logo-text{color:var(--deep);}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.navlink{position:relative;cursor:pointer;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 0;transition:color .3s;color:#fff;text-decoration:none;}
+.navbar.scrolled .navlink{color:var(--deep);}
+.navlink::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--teal);transition:width .3s;}
+.navlink:hover::after{width:100%;}
+.navlink:hover{color:var(--teal)!important;}
+
+/* Mobile menu */
+.hamburger{display:none;cursor:pointer;flex-direction:column;gap:5px;padding:8px;background:none;border:none;}
+.hamburger span{width:22px;height:2px;background:#fff;transition:.3s;}
+.navbar.scrolled .hamburger span{background:var(--deep);}
+.mobile-menu{display:none;background:rgba(253,248,240,.98);backdrop-filter:blur(16px);padding:20px 40px;flex-direction:column;gap:14px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{cursor:pointer;font-size:15px;font-weight:600;color:var(--deep);padding:6px 0;text-decoration:none;}
+
+@media(max-width:768px){
+  .nav-links{display:none!important;}
+  .hamburger{display:flex!important;}
+  .hero-title{font-size:42px!important;}
+  .split{grid-template-columns:1fr!important;}
+  .team-grid{grid-template-columns:1fr 1fr!important;}
+  .challenge-row{grid-template-columns:1fr!important;}
+  .challenge-visual{order:1!important;}
+  .challenge-text{order:0!important;}
+  .stats-row{gap:16px!important;}
+  .stat-item .stat-num{font-size:28px!important;}
+}
+
+/* Hero */
+.hero{min-height:100vh;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(155deg,var(--deep) 0%,#1E3D50 35%,var(--teal-dark) 70%,var(--teal) 100%);background-size:200% 200%;animation:heroShimmer 14s ease infinite;overflow:hidden;}
+.hero-circle{position:absolute;border-radius:50%;}
+.hero-circle-1{top:12%;left:6%;width:180px;height:180px;background:radial-gradient(circle,rgba(42,157,143,.3),transparent);animation:float 7s ease-in-out infinite;}
+.hero-circle-2{bottom:18%;right:8%;width:240px;height:240px;background:radial-gradient(circle,rgba(200,182,226,.18),transparent);animation:float 9s ease-in-out infinite 1s;}
+.hero-circle-3{top:50%;right:30%;width:100px;height:100px;background:radial-gradient(circle,rgba(232,160,191,.15),transparent);animation:float 6s ease-in-out infinite .5s;}
+.hero-dots{position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle at 2px 2px,#fff 1px,transparent 0);background-size:44px 44px;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:850px;padding:0 24px;animation:fadeUp .8s ease forwards;}
+.hero-badge{display:inline-block;padding:8px 28px;border-radius:50px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-bottom:28px;backdrop-filter:blur(8px);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,7vw,84px);font-weight:700;color:#fff;line-height:1.08;margin-bottom:20px;}
+.hero-title span{color:var(--earth);font-style:italic;}
+.hero-sub{font-size:clamp(16px,1.8vw,19px);color:rgba(255,255,255,.75);line-height:1.75;max-width:580px;margin:0 auto 36px;}
+.btn-primary{padding:15px 44px;border-radius:50px;background:var(--teal);color:#fff;font-size:15px;font-weight:600;letter-spacing:1px;border:none;cursor:pointer;font-family:'Nunito Sans',sans-serif;transition:all .3s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(42,157,143,.25);}
+.hero-wave{position:absolute;bottom:-2px;left:0;width:100%;}
+
+/* Sections */
+.section{padding:80px 24px;}
+.section-first{padding-top:100px;}
+.section-cream{background:var(--cream);}
+.section-white{background:#fff;}
+.container{max-width:1060px;margin:0 auto;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,48px);font-weight:700;color:var(--deep);text-align:center;margin-bottom:48px;}
+.section-subtitle{text-align:center;font-size:16px;color:var(--muted);max-width:560px;margin:0 auto 56px;line-height:1.7;}
+
+/* Split layout */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.content-card{background:#fff;border-radius:20px;padding:40px 36px;box-shadow:0 4px 32px rgba(42,157,143,.07);border-left:4px solid var(--teal);}
+.content-card p{font-size:16.5px;line-height:1.85;color:var(--text);}
+.content-card p+p{margin-top:16px;}
+.image-placeholder{border-radius:20px;overflow:hidden;background:linear-gradient(135deg,rgba(42,157,143,.15),rgba(200,182,226,.15));height:320px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(42,157,143,.2);}
+.image-placeholder-inner{text-align:center;padding:32px;}
+.image-placeholder-icon{font-size:64px;margin-bottom:16px;}
+.image-placeholder-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--deep);font-style:italic;}
+.image-placeholder-hint{font-size:13px;color:var(--muted);margin-top:12px;letter-spacing:1px;text-transform:uppercase;}
+
+/* Stats panel */
+.stats-panel{border-radius:20px;overflow:hidden;background:linear-gradient(135deg,var(--deep),#1E3D50);height:340px;display:flex;align-items:center;justify-content:center;padding:32px;position:relative;}
+.stats-panel-dots{position:absolute;inset:0;opacity:.05;background-image:radial-gradient(circle at 2px 2px,#fff 1px,transparent 0);background-size:32px 32px;}
+.stats-inner{text-align:center;position:relative;z-index:2;}
+.stats-row{display:flex;justify-content:center;gap:32px;margin-bottom:24px;flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--earth);}
+.stat-label{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+.stats-source{font-size:13px;color:rgba(255,255,255,.5);letter-spacing:1px;text-transform:uppercase;}
+.summary-box{margin-top:24px;padding:18px 24px;border-radius:14px;background:rgba(42,157,143,.1);border-left:3px solid var(--teal);}
+.summary-box p{font-size:15px;font-weight:600;color:var(--deep);line-height:1.6;}
+
+/* Solution */
+.solution-text{font-size:16.5px;line-height:1.85;color:var(--text);max-width:820px;margin:0 auto 24px;text-align:center;}
+.prototype-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--deep);text-align:center;margin-bottom:40px;}
+.prototype-banner{border-radius:20px;overflow:hidden;background:linear-gradient(135deg,var(--teal),var(--teal-dark));padding:48px 40px;display:flex;justify-content:center;align-items:center;min-height:240px;}
+.prototype-inner{text-align:center;color:#fff;max-width:700px;}
+.prototype-items{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.prototype-item{background:rgba(255,255,255,.12);border-radius:16px;padding:20px 24px;min-width:130px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);}
+.prototype-item-icon{font-size:32px;margin-bottom:8px;}
+.prototype-item-text{font-size:13px;font-weight:600;letter-spacing:.5px;}
+.prototype-hint{font-size:14px;opacity:.7;letter-spacing:1px;text-transform:uppercase;}
+
+/* Challenges */
+.challenges-grid{display:grid;gap:36px;}
+.challenge-row{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:stretch;}
+.challenge-text{background:var(--cream);border-radius:20px;padding:36px 32px;}
+.challenge-header{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.challenge-num{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:700;padding:4px 14px;border-radius:50px;}
+.challenge-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--deep);}
+.challenge-body{font-size:15px;line-height:1.85;color:var(--text);}
+.challenge-visual{border-radius:20px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:200px;}
+.challenge-visual-inner{text-align:center;padding:24px;}
+.challenge-visual-icon{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px;}
+.challenge-visual-hint{font-size:13px;color:var(--muted);letter-spacing:.5px;}
+
+/* Team */
+.team-subtitle{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--muted);text-align:center;margin-bottom:8px;}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.team-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.05);text-align:center;transition:transform .4s,box-shadow .4s;}
+.team-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 24px 48px rgba(0,0,0,.1);}
+.team-photo{height:220px;display:flex;align-items:center;justify-content:center;position:relative;}
+.team-avatar{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;font-family:'Cormorant Garamond',serif;font-weight:700;color:#fff;}
+.team-photo-hint{position:absolute;bottom:8px;font-size:11px;color:var(--muted);letter-spacing:.5px;}
+.team-info{padding:24px 20px 28px;}
+.team-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--deep);margin-bottom:4px;}
+.team-role{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.team-bio{font-size:14px;line-height:1.7;color:var(--muted);}
+
+/* Footer */
+.footer{background:var(--deep);color:rgba(255,255,255,.7);padding:48px 24px 36px;text-align:center;}
+.footer-inner{max-width:1060px;margin:0 auto;}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;}
+.footer-logo-circle{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--sage));display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:12px;}
+.footer-logo-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#fff;}
+.footer-tagline{font-size:13px;margin-bottom:20px;line-height:1.6;}
+.footer-socials{display:flex;justify-content:center;gap:16px;margin-bottom:24px;}
+.footer-social{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:rgba(255,255,255,.6);transition:background .3s;}
+.footer-social:hover{background:var(--teal);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;font-size:12px;color:rgba(255,255,255,.4);}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#Home">
+      <div class="nav-logo-circle">TC</div>
+      <span class="nav-logo-text">Think Cell</span>
+    </a>
+    <div class="nav-links">
+      <a class="navlink" href="#Home">Home</a>
+      <a class="navlink" href="#Mission">Mission</a>
+      <a class="navlink" href="#Problem">Problem</a>
+      <a class="navlink" href="#Solution">Solution</a>
+      <a class="navlink" href="#Challenges">Challenges</a>
+      <a class="navlink" href="#Team">Team</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#Home" onclick="closeMenu()">Home</a>
+    <a href="#Mission" onclick="closeMenu()">Mission</a>
+    <a href="#Problem" onclick="closeMenu()">Problem</a>
+    <a href="#Solution" onclick="closeMenu()">Solution</a>
+    <a href="#Challenges" onclick="closeMenu()">Challenges</a>
+    <a href="#Team" onclick="closeMenu()">Team</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="Home">
+  <div class="hero-circle hero-circle-1"></div>
+  <div class="hero-circle hero-circle-2"></div>
+  <div class="hero-circle hero-circle-3"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🌿 Mental Health &nbsp;•&nbsp; Women Empowerment &nbsp;•&nbsp; Rwanda</div>
+    <h1 class="hero-title">OUR THINK CELL<br/><span>Journey</span></h1>
+    <p class="hero-sub">Empowering women in Rwanda by bridging the mental health gap through education, community, and lasting change.</p>
+    <a href="#Mission"><button class="btn-primary">WELCOME</button></a>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 100" preserveAspectRatio="none">
+    <path d="M0,40 C360,100 1080,0 1440,70 L1440,100 L0,100 Z" fill="#FDF8F0"/>
+  </svg>
+</section>
+
+<!-- MISSION -->
+<section class="section section-first section-cream" id="Mission">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title">Mission Statement</h2>
+    </div>
+    <div class="split">
+      <div class="fade-in">
+        <div class="content-card">
+          <p>Our mission is to empower women from Rwanda, by closing gender gaps in healthcare through education and community-driven change, creating opportunities and role models that inspire trust, and believe in women's abilities.</p>
+          <p>We envision a Rwanda where every woman has access to quality mental health care — where awareness replaces stigma, where communities support healing, and where women lead the transformation of healthcare from the ground up.</p>
+        </div>
+      </div>
+      <div class="fade-in">
+        <div class="image-placeholder">
+          <div class="image-placeholder-inner">
+            <div class="image-placeholder-icon">🌱</div>
+            <p class="image-placeholder-text">"Empowering women,<br/>healing minds"</p>
+            <p class="image-placeholder-hint">Add your team photo here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section section-white" id="Problem">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title">Problem Statement</h2>
+    </div>
+    <div class="split">
+      <div class="fade-in">
+        <div class="stats-panel">
+          <div class="stats-panel-dots"></div>
+          <div class="stats-inner">
+            <div class="stats-row">
+              <div class="stat-item">
+                <div class="stat-num">23.2%</div>
+                <div class="stat-label">Women Affected</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">16.6%</div>
+                <div class="stat-label">Men Affected</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num">2035</div>
+                <div class="stat-label">Our Target Year</div>
+              </div>
+            </div>
+            <p class="stats-source">Rwanda Mental Health Survey, 2018</p>
+          </div>
+        </div>
+      </div>
+      <div class="fade-in">
+        <div>
+          <p style="font-size:16.5px;line-height:1.85;color:var(--text);">Although Rwanda has made significant progress in strengthening its healthcare system, access to quality services, particularly mental health care, in areas like Huye, in the southern part of Rwanda, remains limited.</p>
+          <p style="font-size:16.5px;line-height:1.85;color:var(--text);margin-top:16px;">According to the Rwanda Mental Health Survey (2018), approximately 20–23% of the population experiences a mental disorder, with women mostly affected (23.2% compared to 16.6% of men). A shortage of specialized professionals and limited availability of services, especially in rural areas, leaves many individuals without adequate care, negatively impacting productivity, family stability, and overall well-being.</p>
+          <div class="summary-box">
+            <p>In summary: Low awareness and affordability of mental health services in Rwanda, especially among women.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="section section-cream" id="Solution">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" style="margin-bottom:16px;">Solution</h2>
+    </div>
+    <div class="fade-in">
+      <p class="solution-text">Our goal is to reduce mental healthcare barriers for women in Huye through community-based peer support, education workshops, and referral systems. We aim to increase mental health awareness by 40% among women in Huye by 2030, train 50+ peer counselors, and establish a replicable model for community-based mental healthcare across Rwanda.</p>
+      <p class="solution-text" style="margin-bottom:40px;">These programs will offer mental health education, peer counseling, referral to professional services, and health literacy on stigma reduction and wellbeing. By bringing care directly to women in their communities, we aim to improve access, raise awareness, and build a stronger, more resilient healthcare system in Huye.</p>
+    </div>
+    <div class="fade-in">
+      <h3 class="prototype-title">Prototype: Community Mental Health Support Program</h3>
+    </div>
+    <div class="fade-in">
+      <div class="prototype-banner">
+        <div class="prototype-inner">
+          <div class="prototype-items">
+            <div class="prototype-item">
+              <div class="prototype-item-icon">📚</div>
+              <div class="prototype-item-text">Workshops</div>
+            </div>
+            <div class="prototype-item">
+              <div class="prototype-item-icon">🤝</div>
+              <div class="prototype-item-text">Peer Training</div>
+            </div>
+            <div class="prototype-item">
+              <div class="prototype-item-icon">🏥</div>
+              <div class="prototype-item-text">Referral System</div>
+            </div>
+            <div class="prototype-item">
+              <div class="prototype-item-icon">📱</div>
+              <div class="prototype-item-text">Mobile Outreach</div>
+            </div>
+          </div>
+          <p class="prototype-hint">Add your prototype image/video here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHALLENGES -->
+<section class="section section-white" id="Challenges">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" style="margin-bottom:12px;">Journey Through Learning</h2>
+      <p class="section-subtitle">Six transformative E-LAB challenges that shaped our thinking and brought us closer to real impact.</p>
+    </div>
+    <div class="challenges-grid">
+
+      <!-- Challenge 1 -->
+      <div class="fade-in">
+        <div class="challenge-row">
+          <div class="challenge-text" style="border-left:4px solid var(--teal);">
+            <div class="challenge-header">
+              <span class="challenge-num" style="color:var(--teal);background:rgba(42,157,143,.15);">01</span>
+              <h3 class="challenge-name">Challenge One — Introductions</h3>
+            </div>
+            <p class="challenge-body">Each team member introduced themselves by sharing their name, background, interests, a fun fact, and what they bring to the team. Together, we shared our group statement about what we hope to gain from E-Lab. This challenge showcased our team's creativity, collaboration, and enthusiasm for the program.</p>
+          </div>
+          <div class="challenge-visual" style="background:linear-gradient(135deg,rgba(42,157,143,.12),rgba(42,157,143,.06));border:1px solid rgba(42,157,143,.2);">
+            <div class="challenge-visual-inner">
+              <div class="challenge-visual-icon" style="background:rgba(42,157,143,.2);">🔍</div>
+              <p class="challenge-visual-hint">Add photo or video here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 2 -->
+      <div class="fade-in">
+        <div class="challenge-row">
+          <div class="challenge-visual" style="background:linear-gradient(135deg,rgba(200,182,226,.12),rgba(200,182,226,.06));border:1px solid rgba(200,182,226,.2);">
+            <div class="challenge-visual-inner">
+              <div class="challenge-visual-icon" style="background:rgba(200,182,226,.2);">🌍</div>
+              <p class="challenge-visual-hint">Add photo or video here</p>
+            </div>
+          </div>
+          <div class="challenge-text" style="border-left:4px solid var(--lavender);">
+            <div class="challenge-header">
+              <span class="challenge-num" style="color:var(--lavender);background:rgba(200,182,226,.15);">02</span>
+              <h3 class="challenge-name">Challenge Two — Community Story</h3>
+            </div>
+            <p class="challenge-body">The aim of this challenge was to choose one African community and tell their story. We highlighted the unique culture, strengths, and challenges of our chosen community, discussing both the positive aspects and common misconceptions. Each member took on a specific role — host, stakeholder, or narrator — to present our story creatively.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 3 -->
+      <div class="fade-in">
+        <div class="challenge-row">
+          <div class="challenge-text" style="border-left:4px solid var(--sage);">
+            <div class="challenge-header">
+              <span class="challenge-num" style="color:var(--sage);background:rgba(167,196,160,.15);">03</span>
+              <h3 class="challenge-name">Challenge Three — Community Impact</h3>
+            </div>
+            <p class="challenge-body">We were required to do an activity that would make an impact on our community. Our team chose to support community members by raising awareness around women's mental health. We documented the entire process from identifying the need, planning our approach, to making a difference. This challenge showed how small actions can create meaningful change.</p>
+          </div>
+          <div class="challenge-visual" style="background:linear-gradient(135deg,rgba(167,196,160,.12),rgba(167,196,160,.06));border:1px solid rgba(167,196,160,.2);">
+            <div class="challenge-visual-inner">
+              <div class="challenge-visual-icon" style="background:rgba(167,196,160,.2);">💛</div>
+              <p class="challenge-visual-hint">Add photo or video here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 4 -->
+      <div class="fade-in">
+        <div class="challenge-row">
+          <div class="challenge-visual" style="background:linear-gradient(135deg,rgba(212,165,116,.12),rgba(212,165,116,.06));border:1px solid rgba(212,165,116,.2);">
+            <div class="challenge-visual-inner">
+              <div class="challenge-visual-icon" style="background:rgba(212,165,116,.2);">🏥</div>
+              <p class="challenge-visual-hint">Add photo or video here</p>
+            </div>
+          </div>
+          <div class="challenge-text" style="border-left:4px solid var(--earth);">
+            <div class="challenge-header">
+              <span class="challenge-num" style="color:var(--earth);background:rgba(212,165,116,.15);">04</span>
+              <h3 class="challenge-name">Challenge Four — Business Visit</h3>
+            </div>
+            <p class="challenge-body">Our team visited a local health facility to learn about its mission, daily operations, challenges, and impact on the community. We interviewed staff to understand how they address mental health needs and the barriers they face. Their commitment to community health inspired us to think about creating meaningful impact through our ideas.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 5 -->
+      <div class="fade-in">
+        <div class="challenge-row">
+          <div class="challenge-text" style="border-left:4px solid var(--rose);">
+            <div class="challenge-header">
+              <span class="challenge-num" style="color:var(--rose);background:rgba(232,160,191,.15);">05</span>
+              <h3 class="challenge-name">Challenge Five — Grant Pitch</h3>
+            </div>
+            <p class="challenge-body">This challenge was about competing for a $10,000 grant by developing a project proposal and a 3-minute video pitch. The goal was to present our Think Tank's mission, the problem we identified, our proposed solution, and the impact we aim to create — showing why our project deserves the grant.</p>
+          </div>
+          <div class="challenge-visual" style="background:linear-gradient(135deg,rgba(232,160,191,.12),rgba(232,160,191,.06));border:1px solid rgba(232,160,191,.2);">
+            <div class="challenge-visual-inner">
+              <div class="challenge-visual-icon" style="background:rgba(232,160,191,.2);">🎬</div>
+              <p class="challenge-visual-hint">Add photo or video here</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 6 -->
+      <div class="fade-in">
+        <div class="challenge-row">
+          <div class="challenge-visual" style="background:linear-gradient(135deg,rgba(26,122,111,.12),rgba(26,122,111,.06));border:1px solid rgba(26,122,111,.2);">
+            <div class="challenge-visual-inner">
+              <div class="challenge-visual-icon" style="background:rgba(26,122,111,.2);">🌐</div>
+              <p class="challenge-visual-hint">Add photo or video here</p>
+            </div>
+          </div>
+          <div class="challenge-text" style="border-left:4px solid var(--teal-dark);">
+            <div class="challenge-header">
+              <span class="challenge-num" style="color:var(--teal-dark);background:rgba(26,122,111,.15);">06</span>
+              <h3 class="challenge-name">Challenge Six — Website</h3>
+            </div>
+            <p class="challenge-body">For our final challenge, we created this website to showcase our E-Lab journey and represent our Think Tank's mission to improve mental healthcare for women in Rwanda. The website includes our mission statement, team profiles, research insights, project goals, and the impact we aim to achieve.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section section-cream" id="Team">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title" style="margin-bottom:8px;">Meet the Team</h2>
+      <p class="team-subtitle">Dedication. Expertise. Passion.</p>
+      <p class="section-subtitle">A group of creative and dedicated members working together to bring our project to life through innovation, teamwork, and passion.</p>
+    </div>
+    <div class="team-grid">
+
+      <div class="fade-in">
+        <div class="team-card">
+          <div class="team-photo" style="background:linear-gradient(135deg,rgba(42,157,143,.3),rgba(42,157,143,.1));">
+            <div class="team-avatar" style="background:linear-gradient(135deg,rgba(42,157,143,.9),rgba(42,157,143,.5));border:3px solid rgba(42,157,143,.7);box-shadow:0 8px 24px rgba(42,157,143,.3);">M1</div>
+            <p class="team-photo-hint">Add profile photo</p>
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Member 1</h3>
+            <div class="team-role" style="color:var(--teal);">Team Lead</div>
+            <p class="team-bio">Encourages teamwork and ensures everyone stays on task.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in">
+        <div class="team-card">
+          <div class="team-photo" style="background:linear-gradient(135deg,rgba(200,182,226,.3),rgba(200,182,226,.1));">
+            <div class="team-avatar" style="background:linear-gradient(135deg,rgba(200,182,226,.9),rgba(200,182,226,.5));border:3px solid rgba(200,182,226,.7);box-shadow:0 8px 24px rgba(200,182,226,.3);">M2</div>
+            <p class="team-photo-hint">Add profile photo</p>
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Member 2</h3>
+            <div class="team-role" style="color:var(--lavender);">Research Lead</div>
+            <p class="team-bio">Brings research skills and data analysis to uncover mental health insights.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in">
+        <div class="team-card">
+          <div class="team-photo" style="background:linear-gradient(135deg,rgba(167,196,160,.3),rgba(167,196,160,.1));">
+            <div class="team-avatar" style="background:linear-gradient(135deg,rgba(167,196,160,.9),rgba(167,196,160,.5));border:3px solid rgba(167,196,160,.7);box-shadow:0 8px 24px rgba(167,196,160,.3);">M3</div>
+            <p class="team-photo-hint">Add profile photo</p>
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Member 3</h3>
+            <div class="team-role" style="color:var(--sage);">Community Liaison</div>
+            <p class="team-bio">Connects with women in Huye communities and gathers their stories.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in">
+        <div class="team-card">
+          <div class="team-photo" style="background:linear-gradient(135deg,rgba(212,165,116,.3),rgba(212,165,116,.1));">
+            <div class="team-avatar" style="background:linear-gradient(135deg,rgba(212,165,116,.9),rgba(212,165,116,.5));border:3px solid rgba(212,165,116,.7);box-shadow:0 8px 24px rgba(212,165,116,.3);">M4</div>
+            <p class="team-photo-hint">Add profile photo</p>
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Member 4</h3>
+            <div class="team-role" style="color:var(--earth);">Creative Director</div>
+            <p class="team-bio">Brings creativity, design, and visual storytelling to the team.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in">
+        <div class="team-card">
+          <div class="team-photo" style="background:linear-gradient(135deg,rgba(232,160,191,.3),rgba(232,160,191,.1));">
+            <div class="team-avatar" style="background:linear-gradient(135deg,rgba(232,160,191,.9),rgba(232,160,191,.5));border:3px solid rgba(232,160,191,.7);box-shadow:0 8px 24px rgba(232,160,191,.3);">M5</div>
+            <p class="team-photo-hint">Add profile photo</p>
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Member 5</h3>
+            <div class="team-role" style="color:var(--rose);">Communications</div>
+            <p class="team-bio">Contributes public speaking and content creation skills.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-in">
+        <div class="team-card">
+          <div class="team-photo" style="background:linear-gradient(135deg,rgba(26,122,111,.3),rgba(26,122,111,.1));">
+            <div class="team-avatar" style="background:linear-gradient(135deg,rgba(26,122,111,.9),rgba(26,122,111,.5));border:3px solid rgba(26,122,111,.7);box-shadow:0 8px 24px rgba(26,122,111,.3);">M6</div>
+            <p class="team-photo-hint">Add profile photo</p>
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Member 6</h3>
+            <div class="team-role" style="color:var(--teal-dark);">Strategy & Planning</div>
+            <p class="team-bio">Helps with planning and coordination so the team stays organized.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-logo-circle">TC</div>
+      <span class="footer-logo-text">Think Cell</span>
+    </div>
+    <p class="footer-tagline">E-LAB Think Tank • Grand Challenge: Healthcare • Great Opportunity: Women Empowerment</p>
+    <div class="footer-socials">
+      <div class="footer-social">📷</div>
+      <div class="footer-social">▶️</div>
+    </div>
+    <div class="footer-bottom">© 2025 Think Cell Rwanda. All rights reserved. Made with 💚 for women's mental health.</div>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', function(){
+  const nav = document.getElementById('navbar');
+  if(window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+
+// Mobile menu
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// Fade-in on scroll
+const observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, {threshold: 0.12});
+
+document.querySelectorAll('.fade-in').forEach(function(el){
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
