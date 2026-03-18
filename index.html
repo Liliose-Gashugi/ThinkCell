@@ -6,6 +6,7 @@
 <title>Think Cell Journey</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
+  @keyframes typingBounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-8px);opacity:1}}
 :root{
   --teal:#2A9D8F;--teal-dark:#1A7A6F;--sage:#A7C4A0;--lavender:#C8B6E2;
   --cream:#FDF8F0;--earth:#D4A574;--deep:#1B2A3B;--rose:#E8A0BF;
@@ -287,7 +288,8 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
     <div class="fade-in">
       <h3 class="prototype-title">Prototype: Community Mental Health Support Program</h3>
     </div>
-    <div class="fade-in">
+    <!-- <div class="fade-in">
+
       <div class="prototype-banner">
         <div class="prototype-inner">
           <div class="prototype-items">
@@ -308,10 +310,235 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
               <div class="prototype-item-text">Live Chat Box</div>
             </div>
           </div>
-          <!-- <p class="prototype-hint">Add your prototype image/video here</p> -->
+          <p class="prototype-hint">Add your prototype image/video here</p>
+        </div>
+      </div>
+    </div> -->
+    <div class="fade-in">
+      <div class="prototype-banner">
+        <div class="prototype-inner">
+          <div class="prototype-items" style="display:flex;justify-content:center;gap:24px;flex-wrap:nowrap;">
+            <div class="prototype-item" onclick="openPopup('workshops')" style="cursor:pointer;min-width:110px;">
+              <div class="prototype-item-icon">📚</div>
+              <div class="prototype-item-text">Learning Courses</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('peer')" style="cursor:pointer;min-width:110px;">
+              <div class="prototype-item-icon">🤝</div>
+              <div class="prototype-item-text">Peer Training</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('referral')" style="cursor:pointer;min-width:110px;">
+              <div class="prototype-item-icon">🏥</div>
+              <div class="prototype-item-text">Referral System</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('outreach')" style="cursor:pointer;min-width:110px;">
+              <div class="prototype-item-icon">📱</div>
+              <div class="prototype-item-text">Mobile Outreach</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('chatbox')" style="cursor:pointer;min-width:110px;">
+              <div class="prototype-item-icon">💬</div>
+              <div class="prototype-item-text">Live Chatbox</div>
+            </div>
+          </div>
+          <p class="prototype-hint">Click each item to learn more</p>
         </div>
       </div>
     </div>
+
+<!-- POPUPS -->
+      <div id="popup-overlay" onclick="closePopup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;backdrop-filter:blur(4px);transition:opacity .3s;">
+      </div>
+
+      <div id="popup-box" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:20px;padding:40px 36px;max-width:540px;width:90%;max-height:80vh;overflow-y:auto;z-index:2001;box-shadow:0 24px 80px rgba(0,0,0,.25);">
+        <button onclick="closePopup()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted);">✕</button>
+        <div id="popup-content"></div>
+      </div>
+
+      <script>
+const popupData = {
+  workshops: {
+    icon: "📚",
+    title: "Learning Courses",
+    items: [
+      { name: "Understanding Mental Health", desc: "An introductory course covering what mental health is, common disorders, and why it matters for women in Rwanda." },
+      { name: "Breaking the Stigma", desc: "Learn how cultural beliefs shape attitudes toward mental health and practical strategies to challenge stigma in your community." },
+      { name: "Stress & Anxiety Management", desc: "Techniques for managing daily stress, anxiety, and emotional overwhelm — tailored for women balancing work, family, and life." },
+      { name: "Self-Care & Wellbeing", desc: "A course on building healthy habits, setting boundaries, and prioritizing your mental and physical wellbeing." },
+      { name: "Supporting Others", desc: "Learn how to recognize when someone is struggling and how to offer support without overstepping or causing harm." }
+    ]
+  },
+  peer: {
+    icon: "🤝",
+    title: "Peer Training",
+    items: [
+      { name: "Peer Counselor Certification", desc: "A structured training program to equip community members with basic counseling skills and active listening techniques." },
+      { name: "Mental Health First Aid", desc: "Learn to identify early signs of mental health issues and provide initial support before professional help is available." },
+      { name: "Facilitating Support Groups", desc: "Training on how to lead safe, confidential group discussions where women can share experiences and support each other." },
+      { name: "Youth Mental Health Champions", desc: "Empowering young people to lead mental health clubs in schools and become advocates in their communities." }
+    ]
+  },
+  referral: {
+    icon: "🏥",
+    title: "Referral System",
+    items: [
+      { name: "Partner Clinics Directory", desc: "A list of partnered clinics, practitioners and surrounding areas offering affordable mental health services." },
+      { name: "How Referrals Work", desc: "Through our live chat box or community outreach, individuals are assessed and connected to the right level of care." },
+      { name: "Practitioner: Nicolas", desc: "Our partner mental health practitioner who provides consultations and guidance for women referred through our program." },
+      { name: "Follow-Up Care", desc: "We track referrals and follow up to ensure women receive the support they need and stay connected to care." }
+    ]
+  },
+  outreach: {
+    icon: "📱",
+    title: "Mobile Outreach",
+    items: [
+      { name: "TikTok & Instagram Campaigns", desc: "Educational content on mental health awareness, shared through engaging short videos and posts on social media." },
+      { name: "Influencer Collaborations", desc: "Partnering with Rwandan influencers to amplify our message and reach wider audiences through trending content." },
+      { name: "School & University Visits", desc: "In-person sessions at schools and universities to normalize mental health conversations and promote our resources." },
+      { name: "Hashtag Campaigns", desc: "Creating viral hashtag trends to spark national and global conversations about women's mental health in Rwanda." }
+    ]
+  },
+  chatbox: {
+    icon: "💬",
+    title: "Live Chatbox",
+    isChatbot: true
+  }
+};
+
+function openPopup(key) {
+  var data = popupData[key];
+  var html = '';
+
+  if (data.isChatbot) {
+    html = '<div style="height:500px;display:flex;flex-direction:column;margin:-20px -16px -20px -16px;">';
+    html += '<div style="background:linear-gradient(135deg,#1B2A3B,#1E3D50);padding:16px 20px;display:flex;align-items:center;gap:12px;border-radius:12px 12px 0 0;">';
+    html += '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#2A9D8F,#A7C4A0);display:flex;align-items:center;justify-content:center;color:#fff;font-family:Cormorant Garamond,serif;font-weight:700;font-size:14px;">TC</div>';
+    html += '<div><div style="font-family:Cormorant Garamond,serif;font-size:18px;font-weight:700;color:#fff;">Think Cell Chat - Ask any question</div>';
+    html += '<div style="font-size:11px;color:rgba(255,255,255,.6);"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ADE80;margin-right:5px;"></span>Online (Mental Health Support Assistant)</div></div></div>';
+    html += '<div id="chatMessagesPopup" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(180deg,#fafcfb,#FDF8F0);">';
+    html += '<div style="align-self:flex-start;max-width:85%;"><div style="padding:12px 16px;border-radius:16px;border-bottom-left-radius:4px;font-size:13px;line-height:1.7;background:#fff;color:#3D4F5F;border:1px solid rgba(42,157,143,.1);box-shadow:0 2px 8px rgba(0,0,0,.04);">Hi there! 👋 I\'m the Think Cell mental health assistant. I\'m here to help you learn about mental health, answer your questions, and connect you with resources.<br><br>How can I help you today?</div></div>';
+    html += '</div>';
+    html += '<div id="chatQuickReplies" style="display:flex;flex-wrap:wrap;gap:6px;padding:8px 16px;">';
+    ["What is mental health?","I feel stressed","Find a clinic","About Think Cell"].forEach(function(q) {
+      html += '<div onclick="sendChatMessage(\'' + q + '\')" style="padding:6px 14px;border-radius:50px;font-size:12px;font-weight:600;background:rgba(42,157,143,.08);color:#2A9D8F;border:1px solid rgba(42,157,143,.2);cursor:pointer;white-space:nowrap;">' + q + '</div>';
+    });
+    html += '</div>';
+    html += '<div style="padding:12px 16px;border-top:1px solid rgba(42,157,143,.08);display:flex;align-items:center;gap:10px;background:#fff;border-radius:0 0 12px 12px;">';
+    html += '<input type="text" id="chatInputPopup" placeholder="Type your message..." onkeydown="if(event.key===\'Enter\')sendChatMessage()" style="flex:1;padding:10px 16px;border-radius:50px;border:1px solid rgba(42,157,143,.15);font-size:13px;font-family:Nunito Sans,sans-serif;outline:none;color:#3D4F5F;background:#FDF8F0;"/>';
+    html += '<button onclick="sendChatMessage()" style="width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(135deg,#2A9D8F,#1A7A6F);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">➤</button>';
+    html += '</div></div>';
+    html += '<p style="text-align:center;font-size:10px;color:#7A8D9C;margin-top:12px;">⚠️ This chatbot provides general information only. Not a substitute for professional help.</p>';
+  } else {
+    html = '<div style="text-align:center;margin-bottom:24px;">';
+    html += '<div style="font-size:48px;margin-bottom:12px;">' + data.icon + '</div>';
+    html += '<h3 style="font-family:Cormorant Garamond,serif;font-size:28px;font-weight:700;color:var(--deep);">' + data.title + '</h3>';
+    html += '</div>';
+    data.items.forEach(function(item) {
+      html += '<div style="padding:16px 20px;margin-bottom:12px;background:var(--cream);border-radius:14px;border-left:3px solid var(--teal);">';
+      html += '<h4 style="font-family:Cormorant Garamond,serif;font-size:18px;font-weight:700;color:var(--deep);margin-bottom:6px;">' + item.name + '</h4>';
+      html += '<p style="font-size:14px;line-height:1.7;color:var(--muted);">' + item.desc + '</p>';
+      html += '</div>';
+    });
+  }
+
+  document.getElementById('popup-content').innerHTML = html;
+  document.getElementById('popup-overlay').style.display = 'block';
+  document.getElementById('popup-box').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePopup() {
+  document.getElementById('popup-overlay').style.display = 'none';
+  document.getElementById('popup-box').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function getChatResponse(msg) {
+  var lower = msg.toLowerCase();
+  if (lower.includes('emergency') || lower.includes('crisis') || lower.includes('suicide') || lower.includes('kill') || lower.includes('want to die')) {
+    return "🆘 If you are in immediate danger, please reach out now:\n\n📞 Rwanda Mental Health Hotline: 0800 120 026 (toll-free)\n🏥 Go to your nearest district hospital\n📱 Contact Think Cell on Instagram/TikTok for a referral\n\nYou are not alone. Your life matters. 💚";
+  }
+  if (lower.includes('stressed') || lower.includes('stress') || lower.includes('anxious') || lower.includes('anxiety')) {
+    return "I hear you. 💚 Here are some things that might help:\n\n🌿 Deep breathing: in for 4, hold for 4, out for 4\n🚶‍♀️ Take a short walk or gentle movement\n📝 Write down what's on your mind\n🗣️ Talk to someone you trust\n\nIf stress is affecting your daily life, reach out to us on social media for a referral to our partner practitioner Nicolas.";
+  }
+  if (lower.includes('what is mental health') || lower.includes('mental health')) {
+    return "Great question! 🌱 Mental health includes our emotional, psychological, and social well-being. It affects how we think, feel, and act.\n\nIn Rwanda, 23.2% of women experience mental health challenges, yet many don't seek help due to stigma. That's what Think Cell is working to change!\n\nWould you like to know more about a specific topic?";
+  }
+  if (lower.includes('clinic') || lower.includes('doctor') || lower.includes('nicolas') || lower.includes('professional')) {
+    return "Here's how to access support: 🏥\n\n📱 Contact Think Cell on Instagram/TikTok — we'll connect you with Nicolas\n🏥 Visit your nearest district hospital's mental health unit\n📞 Rwanda Mental Health Hotline: 0800 120 026\n\nDon't hesitate to reach out — we're here to help. 💚";
+  }
+  if (lower.includes('think cell') || lower.includes('about') || lower.includes('who are you') || lower.includes('mission')) {
+    return "Think Cell is an E-LAB Think Tank from Rwanda! 🇷🇼\n\n🎯 Mission: Empower women by closing gender gaps in healthcare\n🧠 Focus: Mental health awareness in Huye district\n💡 Solution: Social media, community outreach, and this live chat\n\nWe believe small actions create big change. 💚";
+  }
+  if (lower.includes('sad') || lower.includes('depressed') || lower.includes('lonely') || lower.includes('hopeless') || lower.includes('cry')) {
+    return "Thank you for sharing — that takes courage. 💚\n\n🌿 Be kind to yourself — it's okay to not be okay\n👥 Reach out to someone you trust\n☀️ Do one small thing that brings comfort\n📝 Try journaling your thoughts\n\nIf these feelings persist, contact us on social media for a referral to Nicolas. You matter. 💛";
+  }
+  if (lower.includes('stigma') || lower.includes('shame') || lower.includes('judge')) {
+    return "You're not alone in feeling this way. 🌱\n\n💚 Mental health challenges are not your fault\n🧠 Seeking help is strength, not weakness\n🇷🇼 20-23% of Rwandans face mental health issues — you're far from alone\n\nThink Cell is working to break the stigma through social media and school visits. Together, we can change the conversation. 💚";
+  }
+  if (lower.includes('sleep') || lower.includes('insomnia') || lower.includes('tired')) {
+    return "Sleep and mental health are closely connected. 🌙\n\n😴 Keep a consistent sleep schedule\n📱 Avoid screens 30 min before bed\n🍵 Try calming routines — breathing, tea, stretching\n🌑 Keep your room dark and quiet\n\nIf sleep problems persist, consider speaking with a professional. 💚";
+  }
+  return "Thank you for reaching out! 💚 I can help with:\n\n🧠 Mental health info\n💆‍♀️ Stress management tips\n🏥 Finding clinics and support\n🌱 Self-care strategies\nℹ️ About Think Cell\n\nWhat would you like to know more about?";
+}
+
+function addChatBubble(text, sender) {
+  var area = document.getElementById('chatMessagesPopup');
+  var div = document.createElement('div');
+  div.style.cssText = 'align-self:' + (sender === 'user' ? 'flex-end' : 'flex-start') + ';max-width:85%;';
+  var bgStyle = sender === 'user'
+    ? 'background:linear-gradient(135deg,#2A9D8F,#1A7A6F);color:#fff;border-bottom-right-radius:4px;'
+    : 'background:#fff;color:#3D4F5F;border:1px solid rgba(42,157,143,.1);box-shadow:0 2px 8px rgba(0,0,0,.04);border-bottom-left-radius:4px;';
+  div.innerHTML = '<div style="padding:12px 16px;border-radius:16px;font-size:13px;line-height:1.7;' + bgStyle + '">' + text.replace(/\n/g,'<br>') + '</div>';
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+async function sendChatMessage(quickText) {
+  var input = document.getElementById('chatInputPopup');
+  var text = quickText || (input ? input.value.trim() : '');
+  if (!text) return;
+
+  addChatBubble(text, 'user');
+  if (input) input.value = '';
+
+  var qr = document.getElementById('chatQuickReplies');
+  if (qr) qr.style.display = 'none';
+
+  var area = document.getElementById('chatMessagesPopup');
+  var typing = document.createElement('div');
+  typing.id = 'popupTyping';
+  typing.style.cssText = 'align-self:flex-start;';
+  typing.innerHTML = '<div style="padding:14px 20px;border-radius:16px;background:#fff;border:1px solid rgba(42,157,143,.1);display:flex;gap:5px;"><div style="width:7px;height:7px;border-radius:50%;background:#2A9D8F;opacity:.4;animation:typingBounce 1.4s infinite;"></div><div style="width:7px;height:7px;border-radius:50%;background:#2A9D8F;opacity:.4;animation:typingBounce 1.4s infinite .2s;"></div><div style="width:7px;height:7px;border-radius:50%;background:#2A9D8F;opacity:.4;animation:typingBounce 1.4s infinite .4s;"></div></div>';
+  area.appendChild(typing);
+  area.scrollTop = area.scrollHeight;
+
+  // Store conversation for context
+  if (!window.chatHistory) window.chatHistory = [];
+  window.chatHistory.push({ role: "user", content: text });
+
+  var reply;
+  try {
+    var response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: "You are the Think Cell Mental Health Assistant — a warm, empathetic chatbot created by the Think Cell team from Rwanda. Your role is to support women seeking mental health information.\n\nABOUT THINK CELL:\n- E-LAB Think Tank focused on healthcare and women empowerment\n- Mission: Empower women from Rwanda by closing gender gaps in healthcare through education and community-driven change\n- Focused on mental health awareness in Huye district, southern Rwanda\n- Solution: Social media awareness (TikTok/Instagram), community outreach (school visits), and this live chat box\n- Partner practitioner: Nicolas (mental health practitioner)\n- Cost-effective model: $100-$200 vs $5,000-$50,000 for call centers\n\nKEY STATS: 23.2% of women vs 16.6% of men experience mental disorders (Rwanda Mental Health Survey, 2018). Target: address by 2035.\n\nEMERGENCY RESOURCES:\n- Rwanda Mental Health Hotline: 0800 120 026 (toll-free)\n- Rwanda Biomedical Centre Mental Health Division\n- Nearest district hospital mental health unit\n- Contact Think Cell on Instagram/TikTok for referral to Nicolas\n\nRULES: Be warm and supportive. Use simple language. Keep responses concise (2-3 short paragraphs). Use emojis sparingly. Never diagnose or prescribe. Always recommend professional help for serious concerns. You can respond in English or Kinyarwanda.",
+        messages: window.chatHistory.slice(-10)
+      })
+    });
+    var data = await response.json();
+    reply = data.content.map(function(item) { return item.text || ""; }).join("\n").trim();
+    window.chatHistory.push({ role: "assistant", content: reply });
+  } catch (error) {
+    reply = getChatResponse(text);
+  }
+
+  var t = document.getElementById('popupTyping');
+  if (t) t.remove();
+  addChatBubble(reply, 'bot');
+}
+</script>
   </div>
 </section>
 
@@ -330,7 +557,7 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
           <div class="challenge-text" style="border-left:4px solid var(--teal);">
             <div class="challenge-header">
               <span class="challenge-num" style="color:var(--teal);background:rgba(42,157,143,.15);">01</span>
-              <h3 class="challenge-name">Challenge One — Introductions</h3>
+              <h3 class="challenge-name">Challenge One — Introduction</h3>
             </div>
             <p class="challenge-body">Each team member introduced themselves by sharing their name, background, interests, a fun fact, and what they bring to the team. Together, we shared our group statement about what we hope to gain from E-Lab. This challenge showcased our team's creativity, collaboration, and enthusiasm for the program.</p>
           </div>
@@ -397,7 +624,7 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
           <div class="challenge-text" style="border-left:4px solid var(--lavender);">
             <div class="challenge-header">
               <span class="challenge-num" style="color:var(--lavender);background:rgba(200,182,226,.15);">02</span>
-              <h3 class="challenge-name">Challenge Two — Community Story</h3>
+              <h3 class="challenge-name">Challenge Two — Discover Africa</h3>
             </div>
             <p class="challenge-body">In Challenge Two, our team chose to tell the story of the Ashanti tribe in Ghana. We highlighted the rich culture, traditions, and strengths of the Ashanti people, while also addressing common misconceptions about their community. Each team member took on a specific role to creatively present the story. Through this challenge, we learned the importance of storytelling in preserving and celebrating African heritage, and how understanding diverse communities can inform the way we approach our own work in Rwanda.</p>
           </div>
@@ -410,7 +637,7 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
           <div class="challenge-text" style="border-left:4px solid var(--sage);">
             <div class="challenge-header">
               <span class="challenge-num" style="color:var(--sage);background:rgba(167,196,160,.15);">03</span>
-              <h3 class="challenge-name">Challenge Three — Community Impact</h3>
+              <h3 class="challenge-name">Challenge Three — HELP-LAB</h3>
             </div>
             <p class="challenge-body">In Challenge Three, our team visited Enfants de Dieu, a school that supports children from low-income families. We engaged with the students and staff to understand the challenges these communities face, particularly around health and wellbeing. Through this visit, we saw firsthand how limited resources affect vulnerable families and how mental health often goes unaddressed in these settings. The experience reinforced our commitment to making mental health care more accessible and reminded us that meaningful change starts at the community level. It also showed us how small, direct actions — like showing up and listening — can make a real difference in people's lives</p>
           </div>
@@ -457,7 +684,7 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
           <div class="challenge-text" style="border-left:4px solid var(--earth);">
             <div class="challenge-header">
               <span class="challenge-num" style="color:var(--earth);background:rgba(212,165,116,.15);">04</span>
-              <h3 class="challenge-name">Challenge Four — Business Visit</h3>
+              <h3 class="challenge-name">Challenge Four — Hunt for Treasure</h3>
             </div>
             <p class="challenge-body">In Challenge Four, our team interviewed Nicolas, a mental health practitioner, to learn about his work, the challenges he faces, and the state of mental health care in Rwanda. He shared insights on the barriers women encounter when seeking help — including stigma, limited access to services, and affordability. Nicolas explained how the shortage of mental health professionals in rural areas like Huye leaves many women without support. His firsthand experience deepened our understanding of the problem and directly inspired our solution. This conversation also led to a potential partnership, with Nicolas becoming a key collaborator in our project.</p>
           </div>
@@ -470,7 +697,7 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
           <div class="challenge-text" style="border-left:4px solid var(--rose);">
             <div class="challenge-header">
               <span class="challenge-num" style="color:var(--rose);background:rgba(232,160,191,.15);">05</span>
-              <h3 class="challenge-name">Challenge Five — Grant Pitch</h3>
+              <h3 class="challenge-name">Challenge Five — Mission Pitch</h3>
             </div>
             <p class="challenge-body">This challenge was about competing for a $10,000 grant by developing a project proposal and a 3-minute video pitch. The goal was to present our Think Tank's mission, the problem we identified, our proposed solution, and the impact we aim to create — showing why our project deserves the grant.</p>
           </div>
