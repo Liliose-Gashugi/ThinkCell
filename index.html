@@ -225,7 +225,7 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
           <div class="image-placeholder-inner">
             <div class="image-placeholder-icon">🌱</div>
             <p class="image-placeholder-text">"Empowering women,<br/>healing minds"</p>
-            <p class="image-placeholder-hint">Add your team photo here</p>
+            <!-- <img src="pics/Liliose.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:20px; opacity: 20%;" /> -->
           </div>
         </div>
       </div>
@@ -511,21 +511,15 @@ async function sendChatMessage(quickText) {
   area.appendChild(typing);
   area.scrollTop = area.scrollHeight;
 
-  // Store conversation for context
   if (!window.chatHistory) window.chatHistory = [];
   window.chatHistory.push({ role: "user", content: text });
 
   var reply;
   try {
-    var response = await fetch("https://api.anthropic.com/v1/messages", {
+    var response = await fetch("/.netlify/functions/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: "You are the Think Cell Mental Health Assistant — a warm, empathetic chatbot created by the Think Cell team from Rwanda. Your role is to support women seeking mental health information.\n\nABOUT THINK CELL:\n- E-LAB Think Tank focused on healthcare and women empowerment\n- Mission: Empower women from Rwanda by closing gender gaps in healthcare through education and community-driven change\n- Focused on mental health awareness in Huye district, southern Rwanda\n- Solution: Social media awareness (TikTok/Instagram), community outreach (school visits), and this live chat box\n- Partner practitioner: Nicolas (mental health practitioner)\n- Cost-effective model: $100-$200 vs $5,000-$50,000 for call centers\n\nKEY STATS: 23.2% of women vs 16.6% of men experience mental disorders (Rwanda Mental Health Survey, 2018). Target: address by 2035.\n\nEMERGENCY RESOURCES:\n- Rwanda Mental Health Hotline: 0800 120 026 (toll-free)\n- Rwanda Biomedical Centre Mental Health Division\n- Nearest district hospital mental health unit\n- Contact Think Cell on Instagram/TikTok for referral to Nicolas\n\nRULES: Be warm and supportive. Use simple language. Keep responses concise (2-3 short paragraphs). Use emojis sparingly. Never diagnose or prescribe. Always recommend professional help for serious concerns. You can respond in English or Kinyarwanda.",
-        messages: window.chatHistory.slice(-10)
-      })
+      body: JSON.stringify({ messages: window.chatHistory.slice(-10) })
     });
     var data = await response.json();
     reply = data.content.map(function(item) { return item.text || ""; }).join("\n").trim();
