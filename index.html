@@ -157,6 +157,62 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
 .footer-social{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:rgba(255,255,255,.6);transition:background .3s;}
 .footer-social:hover{background:var(--teal);}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;font-size:12px;color:rgba(255,255,255,.4);}
+.prototype-items {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.prototype-item {
+  background: rgba(255,255,255,.12);
+  border-radius: 16px;
+  padding: 20px 24px;
+  min-width: 120px;
+  max-width: 160px;
+  flex: 1 1 120px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.1);
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s;
+  text-align: center;
+}
+.prototype-item:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,.2);
+}
+
+@media(max-width: 768px) {
+  .prototype-items {
+    gap: 12px;
+  }
+  .prototype-item {
+    min-width: 100px;
+    max-width: 140px;
+    padding: 16px 14px;
+    flex: 1 1 calc(33% - 12px);
+  }
+  .prototype-item-icon {
+    font-size: 26px !important;
+  }
+  .prototype-item-text {
+    font-size: 11px !important;
+  }
+}
+
+@media(max-width: 480px) {
+  .prototype-item {
+    min-width: 80px;
+    max-width: 120px;
+    padding: 14px 10px;
+    flex: 1 1 calc(33% - 8px);
+  }
+  .prototype-item-icon {
+    font-size: 22px !important;
+  }
+  .prototype-item-text {
+    font-size: 10px !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -224,8 +280,8 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
         <div class="image-placeholder">
           <div class="image-placeholder-inner">
             <div class="image-placeholder-icon">🌱</div>
-            <p class="image-placeholder-text">"Empowering women,<br/>healing minds"</p>
-            <!-- <img src="pics/Liliose.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:20px; opacity: 20%;" /> -->
+            <p class="image-placeholder-text">"Empowering women,<br/>healing minds"🌱</p>
+            <img src="pics/group picture.jpeg" style="width:100%;height:100%;object-fit:cover;border-radius:20px; opacity: 100%;" />
           </div>
         </div>
       </div>
@@ -317,7 +373,7 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
     <div class="fade-in">
       <div class="prototype-banner">
         <div class="prototype-inner">
-          <div class="prototype-items" style="display:flex;justify-content:center;gap:24px;flex-wrap:nowrap;">
+          <!-- <div class="prototype-items" style="display:flex;justify-content:center;gap:24px;flex-wrap:nowrap;">
             <div class="prototype-item" onclick="openPopup('workshops')" style="cursor:pointer;min-width:110px;">
               <div class="prototype-item-icon">📚</div>
               <div class="prototype-item-text">Learning Courses</div>
@@ -335,6 +391,28 @@ body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--cre
               <div class="prototype-item-text">Mobile Outreach</div>
             </div>
             <div class="prototype-item" onclick="openPopup('chatbox')" style="cursor:pointer;min-width:110px;">
+              <div class="prototype-item-icon">💬</div>
+              <div class="prototype-item-text">Live Chatbox</div>
+            </div>
+          </div> -->
+          <div class="prototype-items">
+            <div class="prototype-item" onclick="openPopup('workshops')">
+              <div class="prototype-item-icon">📚</div>
+              <div class="prototype-item-text">Learning Courses</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('peer')">
+              <div class="prototype-item-icon">🤝</div>
+              <div class="prototype-item-text">Peer Training</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('referral')">
+              <div class="prototype-item-icon">🏥</div>
+              <div class="prototype-item-text">Referral System</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('outreach')">
+              <div class="prototype-item-icon">📱</div>
+              <div class="prototype-item-text">Mobile Outreach</div>
+            </div>
+            <div class="prototype-item" onclick="openPopup('chatbox')">
               <div class="prototype-item-icon">💬</div>
               <div class="prototype-item-text">Live Chatbox</div>
             </div>
@@ -452,32 +530,130 @@ function closePopup() {
 }
 
 function getChatResponse(msg) {
-  var lower = msg.toLowerCase();
-  if (lower.includes('emergency') || lower.includes('crisis') || lower.includes('suicide') || lower.includes('kill') || lower.includes('want to die')) {
-    return "🆘 If you are in immediate danger, please reach out now:\n\n📞 Rwanda Mental Health Hotline: 0800 120 026 (toll-free)\n🏥 Go to your nearest district hospital\n📱 Contact Think Cell on Instagram/TikTok for a referral\n\nYou are not alone. Your life matters. 💚";
+  var lower = msg.toLowerCase().trim();
+
+  // Emergency/Crisis
+  if (lower.includes('emergency') || lower.includes('crisis') || lower.includes('suicide') || lower.includes('kill') || lower.includes('want to die') || lower.includes('end my life') || lower.includes('hurt myself') || lower.includes('self harm') || lower.includes('no reason to live')) {
+    return "🆘 If you are in immediate danger, please reach out now:\n\n📞 Rwanda Mental Health Hotline: 0800 120 026 (toll-free)\n🏥 Go to your nearest district hospital\n📱 Contact Think Cell on Instagram/TikTok for a referral\n\nYou are not alone. Your life matters. Please reach out right now. 💚";
   }
-  if (lower.includes('stressed') || lower.includes('stress') || lower.includes('anxious') || lower.includes('anxiety')) {
-    return "I hear you. 💚 Here are some things that might help:\n\n🌿 Deep breathing: in for 4, hold for 4, out for 4\n🚶‍♀️ Take a short walk or gentle movement\n📝 Write down what's on your mind\n🗣️ Talk to someone you trust\n\nIf stress is affecting your daily life, reach out to us on social media for a referral to our partner practitioner Nicolas.";
+
+  // Greetings
+  if (/^(hey|hello|hi|hii+|yo|sup|good morning|good evening|good afternoon|good day|howdy|greetings|salut|morning|evening|what'?s up|whats up|hola|bonjour|muraho|amakuru|bite|mwiriwe)/.test(lower) && lower.length < 30) {
+    return "Hey there! 👋 Welcome to Think Cell Chat. I'm here to help with anything related to mental health.\n\nYou can ask me about:\n🧠 What is mental health?\n💆‍♀️ How to manage stress or anxiety\n🏥 Finding a clinic or practitioner\n🌱 Self-care tips\n💚 About the Think Cell project\n\nWhat's on your mind?";
   }
-  if (lower.includes('what is mental health') || lower.includes('mental health')) {
-    return "Great question! 🌱 Mental health includes our emotional, psychological, and social well-being. It affects how we think, feel, and act.\n\nIn Rwanda, 23.2% of women experience mental health challenges, yet many don't seek help due to stigma. That's what Think Cell is working to change!\n\nWould you like to know more about a specific topic?";
+
+  // How are you
+  if (lower.includes('how are you') || lower.includes('how do you do') || lower.includes('how you doing') || lower.includes('are you ok')) {
+    return "I'm doing well, thank you for asking! 😊 More importantly, how are YOU doing? I'm here to listen and help with anything related to mental health. 💚\n\nFeel free to ask me anything or share what's on your mind.";
   }
-  if (lower.includes('clinic') || lower.includes('doctor') || lower.includes('nicolas') || lower.includes('professional')) {
-    return "Here's how to access support: 🏥\n\n📱 Contact Think Cell on Instagram/TikTok — we'll connect you with Nicolas\n🏥 Visit your nearest district hospital's mental health unit\n📞 Rwanda Mental Health Hotline: 0800 120 026\n\nDon't hesitate to reach out — we're here to help. 💚";
+
+  // Thanks
+  if (lower.includes('thank') || lower.includes('thanks') || lower.includes('appreciate') || lower.includes('helpful') || lower.includes('great help')) {
+    return "You're very welcome! 💚 I'm always here if you need to talk. Remember, reaching out is a sign of strength. Take care of yourself! 🌱";
   }
-  if (lower.includes('think cell') || lower.includes('about') || lower.includes('who are you') || lower.includes('mission')) {
-    return "Think Cell is an E-LAB Think Tank from Rwanda! 🇷🇼\n\n🎯 Mission: Empower women by closing gender gaps in healthcare\n🧠 Focus: Mental health awareness in Huye district\n💡 Solution: Social media, community outreach, and this live chat\n\nWe believe small actions create big change. 💚";
+
+  // Goodbye
+  if (lower.includes('bye') || lower.includes('goodbye') || lower.includes('see you') || lower.includes('gtg') || lower.includes('gotta go') || lower.includes('talk later')) {
+    return "Take care of yourself! 💚 Remember, Think Cell is always here for you. Don't hesitate to come back anytime you need support. Stay strong! 🌱";
   }
-  if (lower.includes('sad') || lower.includes('depressed') || lower.includes('lonely') || lower.includes('hopeless') || lower.includes('cry')) {
-    return "Thank you for sharing — that takes courage. 💚\n\n🌿 Be kind to yourself — it's okay to not be okay\n👥 Reach out to someone you trust\n☀️ Do one small thing that brings comfort\n📝 Try journaling your thoughts\n\nIf these feelings persist, contact us on social media for a referral to Nicolas. You matter. 💛";
+
+  // Stress/Anxiety
+  if (lower.includes('stressed') || lower.includes('stress') || lower.includes('anxious') || lower.includes('anxiety') || lower.includes('worried') || lower.includes('overwhelmed') || lower.includes('panic') || lower.includes('nervous') || lower.includes('pressure') || lower.includes('burnout') || lower.includes('burn out') || lower.includes('tense') || lower.includes('restless') || lower.includes('can\'t relax') || lower.includes('freak')) {
+    return "I hear you, and it's completely okay to feel this way. 💚 Here are some things that might help:\n\n🌿 Deep breathing: breathe in for 4, hold for 4, out for 4\n🚶‍♀️ Take a short walk or gentle movement\n📝 Write down what's on your mind\n🗣️ Talk to someone you trust\n🎵 Listen to calming music\n\nIf stress is affecting your daily life, reach out to us on social media for a referral to our partner practitioner Nicolas. You don't have to face this alone. 💛";
   }
-  if (lower.includes('stigma') || lower.includes('shame') || lower.includes('judge')) {
-    return "You're not alone in feeling this way. 🌱\n\n💚 Mental health challenges are not your fault\n🧠 Seeking help is strength, not weakness\n🇷🇼 20-23% of Rwandans face mental health issues — you're far from alone\n\nThink Cell is working to break the stigma through social media and school visits. Together, we can change the conversation. 💚";
+
+  // Sadness/Depression
+  if (lower.includes('sad') || lower.includes('depressed') || lower.includes('depression') || lower.includes('lonely') || lower.includes('hopeless') || lower.includes('cry') || lower.includes('crying') || lower.includes('empty') || lower.includes('numb') || lower.includes('worthless') || lower.includes('no motivation') || lower.includes('give up') || lower.includes('miserable') || lower.includes('unhappy') || lower.includes('feeling down') || lower.includes('feel down') || lower.includes('low mood') || lower.includes('broken') || lower.includes('lost') || lower.includes('alone') || lower.includes('nobody cares') || lower.includes('no one cares')) {
+    return "Thank you for sharing — that takes real courage. 💚 Your feelings are valid.\n\n🌿 Be kind to yourself — it's okay to not be okay\n👥 Reach out to someone you trust, even just to talk\n☀️ Do one small thing that usually brings you comfort\n📝 Try journaling your thoughts\n🚶‍♀️ A short walk can help shift your mood\n\nIf these feelings persist, please contact us on social media for a referral to our partner practitioner Nicolas. You matter, and you deserve support. 💛";
   }
-  if (lower.includes('sleep') || lower.includes('insomnia') || lower.includes('tired')) {
-    return "Sleep and mental health are closely connected. 🌙\n\n😴 Keep a consistent sleep schedule\n📱 Avoid screens 30 min before bed\n🍵 Try calming routines — breathing, tea, stretching\n🌑 Keep your room dark and quiet\n\nIf sleep problems persist, consider speaking with a professional. 💚";
+
+  // What is mental health
+  if (lower.includes('what is mental health') || lower.includes('define mental health') || lower.includes('meaning of mental health') || lower.includes('explain mental health') || (lower.includes('mental health') && lower.includes('what'))) {
+    return "Great question! 🌱 Mental health includes our emotional, psychological, and social well-being. It affects how we think, feel, and act in daily life.\n\nGood mental health doesn't mean being happy all the time — it means being able to cope with life's challenges, maintain relationships, and function in daily activities.\n\nIn Rwanda, 23.2% of women experience mental health challenges, yet many don't seek help due to stigma. That's exactly what Think Cell is working to change! 💚\n\nWould you like to know about a specific topic like stress, anxiety, or self-care?";
   }
-  return "Thank you for reaching out! 💚 I can help with:\n\n🧠 Mental health info\n💆‍♀️ Stress management tips\n🏥 Finding clinics and support\n🌱 Self-care strategies\nℹ️ About Think Cell\n\nWhat would you like to know more about?";
+
+  // General mental health mention
+  if (lower.includes('mental health') || lower.includes('mental illness') || lower.includes('mental disorder') || lower.includes('psychological')) {
+    return "Mental health is something that affects all of us. 🌱 In Rwanda, about 23.2% of women experience mental health challenges — so if you're going through something, you're not alone.\n\nI can help you with:\n💆‍♀️ Stress and anxiety management\n🌿 Self-care strategies\n🏥 Finding professional support\n📚 Understanding mental health better\n\nWhat would you like to explore? 💚";
+  }
+
+  // Finding help/clinics/professionals
+  if (lower.includes('clinic') || lower.includes('doctor') || lower.includes('nicolas') || lower.includes('professional') || lower.includes('psychiatrist') || lower.includes('psychologist') || lower.includes('therapist') || lower.includes('counselor') || lower.includes('counsellor') || lower.includes('link me') || lower.includes('connect me') || lower.includes('refer') || lower.includes('practitioner') || lower.includes('hospital') || lower.includes('treatment') || lower.includes('appointment') || lower.includes('where can i get help') || lower.includes('need help') || lower.includes('find help') || lower.includes('get support') || lower.includes('talk to someone') || lower.includes('speak to someone')) {
+    return "Here's how you can access mental health support: 🏥\n\n📱 Contact Think Cell on Instagram or TikTok — we'll connect you with our partner practitioner Nicolas\n🏥 Visit your nearest district hospital's mental health unit\n📞 Rwanda Mental Health Hotline: 0800 120 026 (toll-free)\n🏛️ Check with your local health center for available services\n\nYou don't have to face this alone — reaching out is the bravest step. 💚";
+  }
+
+  // About Think Cell
+  if (lower.includes('think cell') || lower.includes('your mission') || lower.includes('your team') || lower.includes('your project') || lower.includes('who created') || lower.includes('who made') || lower.includes('what is this') || lower.includes('what do you do') || lower.includes('your goal') || lower.includes('e-lab') || lower.includes('elab')) {
+    return "Think Cell is an E-LAB Think Tank from Rwanda! 🇷🇼\n\n🎯 Mission: Empower women by closing gender gaps in healthcare through education and community-driven change\n🧠 Focus: Mental health awareness, especially among women in Huye district\n💡 Solution: Social media awareness (TikTok & Instagram), community outreach in schools, and this live chat\n🤝 Partner: Nicolas, a mental health practitioner\n\n23.2% of women in Rwanda experience mental disorders — we're working to change that by 2035. 💚\n\nWant to know more about our solution or how to get involved?";
+  }
+
+  // Who are you / about the bot
+  if (lower.includes('who are you') || lower.includes('what are you') || lower.includes('your name') || lower.includes('are you a bot') || lower.includes('are you real') || lower.includes('are you human') || lower.includes('are you ai')) {
+    return "I'm the Think Cell Mental Health Assistant! 🤖💚 I was created by the Think Cell team to help people learn about mental health, find coping strategies, and connect with professional support in Rwanda.\n\nI'm not a human, but I'm here to listen and point you in the right direction. For professional support, I can connect you with our partner practitioner Nicolas.\n\nHow can I help you today?";
+  }
+
+  // Stigma
+  if (lower.includes('stigma') || lower.includes('shame') || lower.includes('judge') || lower.includes('judged') || lower.includes('embarrassed') || lower.includes('what will people think') || lower.includes('people will think') || lower.includes('afraid to ask for help') || lower.includes('weak') || lower.includes('crazy') || lower.includes('ashamed')) {
+    return "You're not alone in feeling this way, and it takes courage to even mention it. 🌱\n\n💚 Mental health challenges are just like physical health challenges — they're not your fault\n🧠 Seeking help is a sign of strength, not weakness\n🇷🇼 20-23% of Rwandans face mental health issues — you are far from alone\n🗣️ The more we talk about it, the more we normalize it\n\nThink Cell is actively working to reduce stigma through social media and school visits. You deserve support without judgment. 💚";
+  }
+
+  // Sleep issues
+  if (lower.includes('sleep') || lower.includes('insomnia') || lower.includes('can\'t sleep') || lower.includes('tired') || lower.includes('exhausted') || lower.includes('fatigue') || lower.includes('nightmares') || lower.includes('bad dreams') || lower.includes('restless night') || lower.includes('wake up')) {
+    return "Sleep and mental health are closely connected. 🌙 Here are some tips:\n\n😴 Keep a consistent sleep schedule — same time every day\n📱 Avoid screens for 30 minutes before bed\n🍵 Try calming routines — deep breathing, warm tea, stretching\n🌑 Keep your room dark, quiet, and cool\n✍️ Write down worries before bed to \"park\" them for tomorrow\n🚫 Avoid caffeine in the afternoon\n\nIf sleep problems persist for more than a few weeks, it's worth speaking with a professional. We can connect you — just ask. 💚";
+  }
+
+  // Self care
+  if (lower.includes('self care') || lower.includes('self-care') || lower.includes('take care of myself') || lower.includes('wellbeing') || lower.includes('well-being') || lower.includes('wellness') || lower.includes('healthy habits') || lower.includes('how to feel better') || lower.includes('improve my mood') || lower.includes('be happier')) {
+    return "Self-care is so important — and you deserve it! 🌿 Here are some ideas:\n\n💧 Stay hydrated and eat nourishing food\n🚶‍♀️ Move your body — even a short walk helps\n😴 Prioritize good sleep\n📝 Journal your thoughts and feelings\n🧘‍♀️ Try mindfulness or deep breathing exercises\n👥 Spend time with people who lift you up\n🎨 Do something creative or fun\n❌ Set boundaries — it's okay to say no\n\nRemember, self-care isn't selfish — it's necessary. Start small and be kind to yourself. 💚";
+  }
+
+  // Anger
+  if (lower.includes('angry') || lower.includes('anger') || lower.includes('mad') || lower.includes('frustrated') || lower.includes('irritated') || lower.includes('furious') || lower.includes('rage')) {
+    return "It's okay to feel angry — anger is a natural emotion. 💚 What matters is how we handle it:\n\n🌿 Pause and take 5 deep breaths before reacting\n🚶‍♀️ Walk away from the situation if you can\n📝 Write down what triggered your anger\n🗣️ Express your feelings calmly using \"I feel\" statements\n💪 Physical activity can help release tension\n\nIf anger feels overwhelming or hard to control, talking to a professional can really help. We can connect you with Nicolas. 💛";
+  }
+
+  // Relationships
+  if (lower.includes('relationship') || lower.includes('partner') || lower.includes('boyfriend') || lower.includes('girlfriend') || lower.includes('husband') || lower.includes('wife') || lower.includes('marriage') || lower.includes('breakup') || lower.includes('break up') || lower.includes('heartbreak') || lower.includes('family problems') || lower.includes('family issue')) {
+    return "Relationship challenges can really affect our mental health. 💚\n\n🗣️ Open, honest communication is key\n👂 Try to listen as much as you speak\n🚫 Set healthy boundaries — they protect your wellbeing\n📝 Reflect on what you need and what you can control\n💛 Remember: you deserve to be treated with respect\n\nIf relationship stress is overwhelming you, talking to a professional can help you find clarity. We can connect you with support. 💚";
+  }
+
+  // Trauma/PTSD
+  if (lower.includes('trauma') || lower.includes('ptsd') || lower.includes('abuse') || lower.includes('abused') || lower.includes('violence') || lower.includes('assault') || lower.includes('flashback') || lower.includes('painful memories') || lower.includes('bad memories')) {
+    return "I'm so sorry for what you've been through. 💚 Trauma is heavy, but healing is possible.\n\n🌿 Know that what happened is not your fault\n🗣️ Talking to a trained professional can help process trauma safely\n📞 Rwanda Mental Health Hotline: 0800 120 026\n📱 Contact Think Cell to connect with our partner Nicolas\n💛 Be patient with yourself — healing takes time\n\nYou showed real strength by sharing this. You don't have to carry this alone. 💚";
+  }
+
+  // Work/school stress
+  if (lower.includes('school') || lower.includes('exam') || lower.includes('study') || lower.includes('grades') || lower.includes('work stress') || lower.includes('job') || lower.includes('boss') || lower.includes('overwork') || lower.includes('deadline') || lower.includes('academic')) {
+    return "Academic and work pressure can be really tough on mental health. 💚\n\n📋 Break big tasks into smaller, manageable steps\n⏰ Take regular breaks — your brain needs rest\n📝 Prioritize tasks: do the most important ones first\n🗣️ Talk to a teacher, colleague, or friend if you're overwhelmed\n😴 Don't sacrifice sleep — it helps your brain function better\n🎵 Take mental breaks with music, walks, or breathing exercises\n\nRemember: your worth is not defined by your grades or productivity. 💛";
+  }
+
+  // Body image / eating
+  if (lower.includes('body image') || lower.includes('eating') || lower.includes('weight') || lower.includes('fat') || lower.includes('ugly') || lower.includes('appearance') || lower.includes('not good enough') || lower.includes('hate myself') || lower.includes('hate my body')) {
+    return "Your worth is so much more than your appearance. 💚\n\n🌱 Try to focus on what your body can DO, not just how it looks\n🚫 Limit social media that makes you feel bad about yourself\n🗣️ Challenge negative self-talk with kinder words\n💛 Surround yourself with people who appreciate the real you\n🍎 Focus on nourishing your body, not punishing it\n\nIf these feelings are affecting your daily life, please talk to a professional. You deserve to feel comfortable in your own skin. 💚";
+  }
+
+  // Meditation/mindfulness
+  if (lower.includes('meditat') || lower.includes('mindful') || lower.includes('breathing exercise') || lower.includes('calm down') || lower.includes('relax') || lower.includes('coping') || lower.includes('cope')) {
+    return "Here are some techniques you can try right now: 🧘‍♀️\n\n🌬️ Box Breathing: Breathe in for 4 counts, hold for 4, out for 4, hold for 4. Repeat 5 times.\n\n🌿 Grounding (5-4-3-2-1): Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste.\n\n🧠 Body Scan: Close your eyes and slowly focus on relaxing each body part from your toes to your head.\n\n📝 Thought Journaling: Write what you're feeling without judgment.\n\nPracticing these regularly can make a real difference. 💚";
+  }
+
+  // Rwanda specific
+  if (lower.includes('rwanda') || lower.includes('huye') || lower.includes('kigali') || lower.includes('kinyarwanda')) {
+    return "Think Cell focuses on mental health in Rwanda, especially in the Huye district. 🇷🇼\n\n📊 23.2% of Rwandan women experience mental health challenges\n🏥 Many rural areas have limited access to mental health services\n🌱 We're working to change this through awareness and community outreach\n📞 Rwanda Mental Health Hotline: 0800 120 026 (toll-free)\n\nOur goal is to make mental health care accessible and affordable for every woman in Rwanda by 2035. 💚";
+  }
+
+  // Yes/OK/Sure responses
+  if (/^(yes|yeah|yep|sure|ok|okay|alright|go ahead|please|yea|ya)$/i.test(lower)) {
+    return "Great! 😊 What would you like to know about?\n\n🧠 Mental health basics\n💆‍♀️ Stress or anxiety tips\n😢 Dealing with sadness\n🏥 Finding professional support\n🌿 Self-care strategies\n💚 About Think Cell\n\nJust type your question or pick a topic! 💚";
+  }
+
+  // No/negative
+  if (/^(no|nah|nope|not really|nothing|never mind|nevermind|nm)$/i.test(lower)) {
+    return "That's perfectly fine! 😊 I'm here whenever you need me. Remember, there's no wrong time to reach out about your mental health. Take care! 💚🌱";
+  }
+
+  // Catch-all with helpful suggestions
+  return "Thank you for reaching out! 💚 I want to make sure I help you the right way. Here are some topics I can assist with:\n\n🧠 Mental health information\n💆‍♀️ Stress and anxiety management\n😢 Dealing with sadness or difficult emotions\n🏥 Finding clinics and professional support\n🌿 Self-care and coping strategies\n💬 Stigma and talking about mental health\n🇷🇼 Mental health resources in Rwanda\nℹ️ About the Think Cell project\n\nTry asking something like \"How do I manage stress?\" or \"I need to talk to someone.\" 💚";
 }
 
 function addChatBubble(text, sender) {
